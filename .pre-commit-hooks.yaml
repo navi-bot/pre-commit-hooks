@@ -1,0 +1,6 @@
+-   id: gitleaks
+    name: Detect hardcoded secrets
+    description: Run gitleaks against staged files
+    entry: run_gitleaks.sh
+    language: script
+    types: [text]
