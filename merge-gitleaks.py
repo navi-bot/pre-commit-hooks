@@ -35,4 +35,4 @@ if __name__ == '__main__':
     local_config_path = ".gitleaks.toml"
     
     external_config_content = fetch_external_config(external_config_url)
-    merge_configs(local_config, external_config)
+    merge_configs(local_config_path, external_config_content)
