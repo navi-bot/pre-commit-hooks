@@ -34,6 +34,6 @@ if __name__ == '__main__':
     external_config_url = "https://raw.githubusercontent.com/gitleaks/gitleaks/master/config/gitleaks.toml"
     local_config_path = ".gitleaks.toml"
     
-    external_config_content = fetch_external_config(external_url)
+    external_config_content = fetch_external_config(external_config_url)
     local_config = load_local_config(local_path)
     merge_configs(local_config, external_config)
