@@ -7,13 +7,12 @@ def fetch_external_config(url):
     response.raise_for_status()  # Ensure we got a successful response
     return toml.loads(response.text)
 
-def merge_configs(local_config_path, external_config_content):
+def merge_configs(local_config_path, external_config):
     # Load the local configuration
     with open(local_config_path, 'r') as file:
         local_config = toml.load(file)
     
     # Parse the external configuration
-    external_config = toml.loads(external_config_content)
 
     local_rules = {rule['id']: rule for rule in local_config.get('rules', [])}
     external_rules = external_config.get('rules', [])
@@ -34,5 +33,5 @@ if __name__ == '__main__':
     external_config_url = "https://raw.githubusercontent.com/gitleaks/gitleaks/master/config/gitleaks.toml"
     local_config_path = ".gitleaks.toml"
     
-    external_config_content = fetch_external_config(external_config_url)
-    merge_configs(local_config_path, external_config_content)
+    external_config = fetch_external_config(external_config_url)
+    merge_configs(local_config_path, external_config)
