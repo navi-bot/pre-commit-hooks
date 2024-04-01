@@ -2841,10 +2841,3 @@ regex = '''(?i)(?:zendesk)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|
 keywords = [
     "zendesk",
 ]
-
-[extend]
-useDefault = true
-
-[allowlist]
-description = "Allowlist for test PAN cards"
-regexes = ["^ZZZ[A-Z]{2}[0-9]{4}[A-Z]$"]
