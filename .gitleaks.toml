@@ -4,7 +4,13 @@ title = "Gitleaks Config"
 description = "PAN Card"
 id = "pan-card"
 regex = "([A-Za-z]{3}[ABCFGHJLPTabcfghjlpt][A-Za-z]{1}\\d{4}[A-Za-z]{1})"
-secretGroup = 1
+
+[rules.allowlist]
+
+description = "Allowlist for test PAN cards"
+regexes = [
+'''^ZZZ[A-Z]{2}[0-9]{4}[A-Z]$'''
+]
 
 [[rules]]
 id = "adafruit-api-key"
