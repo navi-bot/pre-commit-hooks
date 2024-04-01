@@ -7,38 +7,33 @@ def fetch_external_config(url):
     response.raise_for_status()  # Ensure we got a successful response
     return toml.loads(response.text)
 
-def load_local_config(path):
-    """Load the local .gitleaks.toml configuration."""
-    with open(path, 'r') as file:
-        return toml.load(file)
+def merge_configs(local_config_path, external_config_content):
+    # Load the local configuration
+    with open(local_config_path, 'r') as file:
+        local_config = toml.load(file)
+    
+    # Parse the external configuration
+    external_config = toml.loads(external_config_content)
 
-def merge_configs(local_config, external_config):
-    """Merge external config into local config based on rule IDs."""
     local_rules = {rule['id']: rule for rule in local_config.get('rules', [])}
-    external_rules = {rule['id']: rule for rule in external_config.get('rules', [])}
+    external_rules = external_config.get('rules', [])
 
-    # Update or add external rules that don't conflict with custom local rule IDs
-    for rule_id, rule in external_rules.items():
-        if rule_id not in local_rules:
-            local_rules[rule_id] = rule
+    # Check each external rule to see if it exists in the local rules by id
+    for ext_rule in external_rules:
+        if ext_rule['id'] not in local_rules:
+            # If the rule does not exist in the local config, add it
+            local_config['rules'].append(ext_rule)
 
-    # Convert the merged rules back into a list as expected by the toml format
-    merged_rules = list(local_rules.values())
+    # Save the merged configuration back to the local .gitleaks.toml file
+    with open(local_config_path, 'w') as file:
+        toml.dump(local_config, file)
 
-    # Replace the local config rules with the merged rules
-    local_config['rules'] = merged_rules
-    return local_config
-
-def save_config(config, path):
-    """Save the merged configuration back to .gitleaks.toml."""
-    with open(path, 'w') as file:
-        toml.dump(config, file)
+    print(f"Updated {local_config_path} with new rules from the external configuration.")
 
 if __name__ == '__main__':
-    external_url = "https://raw.githubusercontent.com/gitleaks/gitleaks/master/config/gitleaks.toml"
-    local_path = ".gitleaks.toml"
+    external_config_url = "https://raw.githubusercontent.com/gitleaks/gitleaks/master/config/gitleaks.toml"
+    local_config_path = ".gitleaks.toml"
     
-    external_config = fetch_external_config(external_url)
+    external_config_content = fetch_external_config(external_url)
     local_config = load_local_config(local_path)
-    merged_config = merge_configs(local_config, external_config)
-    save_config(merged_config, local_path)
+    merge_configs(local_config, external_config)
