@@ -5,6 +5,10 @@ id = "pan-card"
 regex = "([A-Za-z]{3}[ABCFGHJLPTabcfghjlpt][A-Za-z]{1}\\d{4}[A-Za-z]{1})"
 secretGroup = 1
 
+[[rules]]
+id = "adafruit-api-key"
+description = "Identified a potential Adafruit API Key, which could lead to unauthorized access to Adafruit services and sensitive data exposure."
+
 [extend]
 useDefault = true
 
